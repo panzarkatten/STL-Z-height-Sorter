@@ -91,10 +91,12 @@ def sort_files(stl_list, basepath):
                 shutil.copy(file, stl_paths[type]['tall'])
 
 
-stl_list = get_stl_list()
 
-stl_list.sort(key=z_value)
+if __name__ == "__main__":
+    stl_list = get_stl_list()
 
-sort_files(stl_list, 'Sorted')
+    stl_list.sort(key=z_value)
+
+    sort_files(stl_list, 'Sorted')
 
     
