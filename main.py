@@ -33,11 +33,6 @@ def get_model_type(filename):
 def z_value(stl):
     return stl['z']
 
-def find_groups(stl_list):
-    divider = 0
-    for stl in stl_list:
-        z = stl['z']
-
 def split_stl_list(stl_list):
     main, accent, other = [], [], []
     for stl in stl_list:
@@ -49,66 +44,57 @@ def split_stl_list(stl_list):
         if type == 'other':
             other.append(stl)
 
-    return main, accent, other
+    return [main, accent, other]
 
-
-def max_gap(sorted_list):
-    max_gap = 0
-    height = 0
+def find_split(sorted_list):
+    max_gap = height = 0
     for i in range(len(sorted_list)):
-        print(f"File : {sorted_list[i]['file']}")
         z = sorted_list[i]['z']
-        print(f'z : {z}')
         pz = sorted_list[i-1]['z']
-        print(f'pz : {pz}')
 
         if z - pz > max_gap:
             max_gap = z - pz
             height = z
 
-    return max_gap, height
+    return height
+
+
+def sort_files(stl_list, basepath):
+    type_list = split_stl_list(stl_list)
+    types = ['main', 'accent', 'other']
+    stl_paths = {}
+
+    for type in types:
+        short = os.path.join(basepath, type, 'short')
+        tall = os.path.join(basepath, type, 'tall')
+
+        if not os.path.exists(short)
+            os.makedirs(short)
+
+        if not os.path.exists(tall)
+            os.makedirs(tall)
+
+        stl_paths[type] = {'short' : short, 'tall' : tall}
 
         
+    for stl_list in type_list
+        split_height = find_split(stl_list)
+
+        for stl in stl_list:
+            file = stl['file']
+            type = stl['type']
+            z = stl['z']
+
+            if z < split_height:
+                shutil.copy(file, stl_paths[type]['short'])
+            else:
+                shutil.copy(file, stl_paths[type]['tall'])
 
 
 stl_list = get_stl_list()
 
 stl_list.sort(key=z_value)
 
-main_stls, accent_stls, other_stls = split_stl_list(stl_list)
+sort_files(stl_list, 'Sorted')
 
-# pprint.pprint(main_stls)
-
-# print(max_gap(main_stls))
-
-gap, split_height = max_gap(main_stls)
-
-print(split_height)
-
-low_path = './Sorted/Main/Low/'
-high_path = './Sorted/Main/High/'
-
-if not os.path.exists(low_path):
-    os.makedirs(low_path)
-
-if not os.path.exists(high_path):
-    os.makedirs(high_path)
-
-for stl in main_stls:
-    file = stl['file']
-    z = stl['z']
-
-    if z < split_height:
-        shutil.copy(file, low_path)
-    else:
-        shutil.copy(file, high_path)
     
-
-
-
-# print(cluster(stl_list, 10))
-
-# pprint.pprint(stl_list)
-
-
-# pprint.pprint(z_heights_sorted)
