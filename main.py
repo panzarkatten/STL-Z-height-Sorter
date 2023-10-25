@@ -68,16 +68,16 @@ def sort_files(stl_list, basepath):
         short = os.path.join(basepath, type, 'short')
         tall = os.path.join(basepath, type, 'tall')
 
-        if not os.path.exists(short)
+        if not os.path.exists(short):
             os.makedirs(short)
 
-        if not os.path.exists(tall)
+        if not os.path.exists(tall):
             os.makedirs(tall)
 
         stl_paths[type] = {'short' : short, 'tall' : tall}
 
         
-    for stl_list in type_list
+    for stl_list in type_list:
         split_height = find_split(stl_list)
 
         for stl in stl_list:
